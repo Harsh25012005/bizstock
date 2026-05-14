@@ -1,6 +1,7 @@
 export const STORAGE_KEYS = {
   auth: "bizstock.auth",
   app: "bizstock.app",
+  onboarding: "bizstock.onboarding",
   order: "bizstock.order",
   product: "bizstock.product",
   syncQueue: "bizstock.sync.queue",

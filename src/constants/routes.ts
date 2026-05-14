@@ -1,3 +1,9 @@
+export const ONBOARDING_ROUTE = "/onboarding";
 export const AUTH_HOME_ROUTE = "/(auth)/login";
+export const AUTH_SIGN_UP_ROUTE = "/(auth)/signup";
+export const AUTH_OTP_ROUTE = "/(auth)/otp";
+export const AUTH_FORGOT_PASSWORD_ROUTE = "/(auth)/forgot-password";
+export const AUTH_RESET_SUCCESS_ROUTE = "/(auth)/reset-success";
+export const AUTH_ADD_BUSINESS_ROUTE = "/(auth)/add-business";
 export const PROTECTED_HOME_ROUTE = "/(protected)/dashboard";
 export const FIREBASE_TEST_ROUTE = "/(protected)/firebase-test";

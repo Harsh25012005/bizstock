@@ -1,14 +1,15 @@
 import { Redirect } from "expo-router";
 import { useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Image, View } from "react-native";
 
-import { ScreenWrapper } from "@/components";
-import { AUTH_HOME_ROUTE, PROTECTED_HOME_ROUTE } from "@/constants";
+import { AUTH_HOME_ROUTE, ONBOARDING_ROUTE, PROTECTED_HOME_ROUTE, bizstockLogo } from "@/constants";
+import { useTheme } from "@/hooks";
 import { useAuthStore } from "@/store";
 
 export default function IndexScreen() {
   const session = useAuthStore((state) => state.session);
   const [shouldRedirect, setShouldRedirect] = useState(false);
+  const { colors } = useTheme();
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -19,27 +20,12 @@ export default function IndexScreen() {
   }, []);
 
   if (shouldRedirect) {
-    return <Redirect href={session ? PROTECTED_HOME_ROUTE : AUTH_HOME_ROUTE} />;
+    return <Redirect href={session ? PROTECTED_HOME_ROUTE : ONBOARDING_ROUTE} />;
   }
 
   return (
-    <ScreenWrapper
-      scrollable={false}
-      title="BizStock"
-      subtitle="Scalable mobile foundation for fast-moving distribution teams."
-    >
-      <View className="flex-1 justify-center">
-        <View className="rounded-[28px] bg-white p-6 shadow-card">
-          <Text className="text-sm uppercase tracking-[2px] text-brand-600">Splash</Text>
-          <Text className="mt-3 text-2xl font-semibold text-ink-900">
-            Preparing the offline-first shell
-          </Text>
-          <Text className="mt-3 text-base leading-6 text-ink-600">
-            Providers, routing guards, persisted state, Firebase bootstrap, and scalable modules
-            are being initialized.
-          </Text>
-        </View>
-      </View>
-    </ScreenWrapper>
+    <View className="flex-1 items-center justify-center" style={{ backgroundColor: colors.background }}>
+      <Image source={bizstockLogo} resizeMode="contain" style={{ width: 220, height: 220 }} />
+    </View>
   );
 }

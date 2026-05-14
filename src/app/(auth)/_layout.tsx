@@ -1,19 +1,14 @@
-import { Redirect, Stack } from "expo-router";
-
-import { FullScreenLoader } from "@/components";
-import { PROTECTED_HOME_ROUTE } from "@/constants";
-import { useAuthGuard } from "@/hooks";
+import { Stack } from "expo-router";
 
 export default function AuthLayout() {
-  const { isAuthenticated, isReady } = useAuthGuard();
-
-  if (!isReady) {
-    return <FullScreenLoader label="Restoring authentication state..." />;
-  }
-
-  if (isAuthenticated) {
-    return <Redirect href={PROTECTED_HOME_ROUTE} />;
-  }
-
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return (
+    <Stack screenOptions={{ headerShown: false, animation: "fade" }}>
+      <Stack.Screen name="login" />
+      <Stack.Screen name="signup" />
+      <Stack.Screen name="otp" />
+      <Stack.Screen name="forgot-password" />
+      <Stack.Screen name="reset-success" />
+      <Stack.Screen name="add-business" />
+    </Stack>
+  );
 }

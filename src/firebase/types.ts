@@ -30,9 +30,11 @@ export interface FirebaseUserProfile extends FirebaseDocument {
 export interface BusinessDocument extends FirebaseDocument {
   name: string;
   ownerId: string;
+  ownerName?: string;
   phoneNumber?: string;
   gstNumber?: string;
   address?: string;
+  category?: string;
 }
 
 export interface ProductDocument extends FirebaseDocument {

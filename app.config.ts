@@ -7,13 +7,13 @@ const config: ExpoConfig = {
   version: "1.0.0",
   orientation: "portrait",
   userInterfaceStyle: "light",
+  icon: "./assets/branding/bizstock-logo.png",
   newArchEnabled: true,
   experiments: {
     typedRoutes: true,
   },
   splash: {
-    resizeMode: "contain",
-    backgroundColor: "#F6F7FB",
+    backgroundColor: "#FFFFFF",
   },
   assetBundlePatterns: ["**/*"],
   ios: {
@@ -23,10 +23,15 @@ const config: ExpoConfig = {
   android: {
     package: "com.bizstock.app",
     googleServicesFile: "./google-services.json",
+    adaptiveIcon: {
+      foregroundImage: "./assets/branding/bizstock-logo.png",
+      backgroundColor: "#FFFFFF",
+    },
   },
   web: {
     bundler: "metro",
     output: "single",
+    favicon: "./assets/branding/bizstock-logo.png",
   },
   plugins: ["expo-router", "expo-secure-store"],
   extra: {

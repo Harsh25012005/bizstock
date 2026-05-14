@@ -3,14 +3,15 @@ import { Text } from "react-native";
 
 import { FullScreenLoader } from "@/components";
 import { AUTH_HOME_ROUTE } from "@/constants";
-import { useAuthGuard } from "@/hooks";
+import { useAuthGuard, useTheme } from "@/hooks";
 
-const TabLabel = ({ label }: { label: string }) => (
-  <Text className="text-xs font-medium text-ink-500">{label}</Text>
+const TabLabel = ({ label, color }: { label: string; color: string }) => (
+  <Text style={{ fontSize: 12, fontWeight: "500", color }}>{label}</Text>
 );
 
 export default function ProtectedLayout() {
   const { isAuthenticated, isReady } = useAuthGuard();
+  const { colors } = useTheme();
 
   if (!isReady) {
     return <FullScreenLoader label="Checking protected session..." />;
@@ -28,38 +29,43 @@ export default function ProtectedLayout() {
           height: 72,
           paddingBottom: 12,
           paddingTop: 10,
-          backgroundColor: "#FFFFFF",
-          borderTopColor: "#E2E8F0",
+          backgroundColor: colors.card,
+          borderTopColor: colors.border,
+        },
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textSecondary,
+        sceneStyle: {
+          backgroundColor: colors.background,
         },
       }}
     >
       <Tabs.Screen
         name="dashboard"
-        options={{ title: "Dashboard", tabBarLabel: () => <TabLabel label="Dashboard" /> }}
+        options={{ title: "Dashboard", tabBarLabel: ({ color }) => <TabLabel label="Dashboard" color={color} /> }}
       />
       <Tabs.Screen
         name="products"
-        options={{ title: "Products", tabBarLabel: () => <TabLabel label="Products" /> }}
+        options={{ title: "Products", tabBarLabel: ({ color }) => <TabLabel label="Products" color={color} /> }}
       />
       <Tabs.Screen
         name="retailers"
-        options={{ title: "Retailers", tabBarLabel: () => <TabLabel label="Retailers" /> }}
+        options={{ title: "Retailers", tabBarLabel: ({ color }) => <TabLabel label="Retailers" color={color} /> }}
       />
       <Tabs.Screen
         name="orders"
-        options={{ title: "Orders", tabBarLabel: () => <TabLabel label="Orders" /> }}
+        options={{ title: "Orders", tabBarLabel: ({ color }) => <TabLabel label="Orders" color={color} /> }}
       />
       <Tabs.Screen
         name="payments"
-        options={{ title: "Payments", tabBarLabel: () => <TabLabel label="Payments" /> }}
+        options={{ title: "Payments", tabBarLabel: ({ color }) => <TabLabel label="Payments" color={color} /> }}
       />
       <Tabs.Screen
         name="inventory"
-        options={{ title: "Inventory", tabBarLabel: () => <TabLabel label="Inventory" /> }}
+        options={{ title: "Inventory", tabBarLabel: ({ color }) => <TabLabel label="Inventory" color={color} /> }}
       />
       <Tabs.Screen
         name="more"
-        options={{ title: "More", tabBarLabel: () => <TabLabel label="More" /> }}
+        options={{ title: "More", tabBarLabel: ({ color }) => <TabLabel label="More" color={color} /> }}
       />
       <Tabs.Screen
         name="firebase-test"
