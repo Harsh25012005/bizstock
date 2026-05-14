@@ -1,11 +1,14 @@
+import { useRouter } from "expo-router";
 import { Text, View } from "react-native";
 
 import { Button, PlaceholderCard, ScreenWrapper } from "@/components";
+import { FIREBASE_TEST_ROUTE } from "@/constants";
 import { useToast } from "@/hooks";
 import { useAuthStore } from "@/store";
 
 export default function MoreScreen() {
-  const reset = useAuthStore((state) => state.reset);
+  const router = useRouter();
+  const logout = useAuthStore((state) => state.logout);
   const { show } = useToast();
 
   return (
@@ -21,17 +24,24 @@ export default function MoreScreen() {
           </Text>
           <View className="mt-5">
             <Button
-              label="Sign out placeholder"
+              label="Sign out"
               variant="secondary"
-              onPress={() => {
-                reset();
+              onPress={async () => {
+                await logout();
                 show({
                   title: "Signed out",
-                  description: "Route guards moved the session back to the auth flow.",
+                  description: "Firebase auth state and the local session store were cleared.",
                   variant: "info",
                 });
               }}
             />
+            <View className="mt-3">
+              <Button
+                label="Open Firestore test screen"
+                variant="ghost"
+                onPress={() => router.push(FIREBASE_TEST_ROUTE)}
+              />
+            </View>
           </View>
         </PlaceholderCard>
       </View>

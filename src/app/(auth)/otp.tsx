@@ -4,6 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 
 import { Button, Input, PlaceholderCard, ScreenWrapper } from "@/components";
+import { getFirebaseErrorMessage } from "@/firebase";
 import { PROTECTED_HOME_ROUTE } from "@/constants";
 import { useToast } from "@/hooks";
 import { otpSchema, type OtpSchema } from "@/schemas";
@@ -11,7 +12,8 @@ import { useAuthStore } from "@/store";
 
 export default function OtpScreen() {
   const router = useRouter();
-  const setSession = useAuthStore((state) => state.setSession);
+  const verifyPendingOtp = useAuthStore((state) => state.verifyPendingOtp);
+  const pendingVerification = useAuthStore((state) => state.pendingVerification);
   const { show } = useToast();
   const {
     control,
@@ -24,26 +26,31 @@ export default function OtpScreen() {
     },
   });
 
-  const onSubmit = handleSubmit(async () => {
-    setSession({
-      userId: "demo-user",
-      phoneNumber: "+91 99999 99999",
-    });
-    show({
-      title: "Protected shell unlocked",
-      description: "This uses local placeholder auth state so the navigation foundation can be exercised.",
-      variant: "success",
-    });
-    router.replace(PROTECTED_HOME_ROUTE);
+  const onSubmit = handleSubmit(async ({ otp }) => {
+    try {
+      await verifyPendingOtp(otp);
+      show({
+        title: "Authentication complete",
+        description: "The Firebase-backed session is now available to the route guard and stores.",
+        variant: "success",
+      });
+      router.replace(PROTECTED_HOME_ROUTE);
+    } catch (error) {
+      show({
+        title: "OTP verification failed",
+        description: getFirebaseErrorMessage(error),
+        variant: "error",
+      });
+    }
   });
 
   return (
     <ScreenWrapper
       title="OTP verification"
-      subtitle="The confirmation flow is scaffolded and ready for future Firebase phone auth wiring."
+      subtitle="Confirm the verification code returned by the Firebase phone auth flow."
     >
       <View className="gap-4">
-        <PlaceholderCard title="Verify code" subtitle="Placeholder logic only">
+        <PlaceholderCard title="Verify code" subtitle={pendingVerification?.phoneNumber ?? "Waiting for OTP request"}>
           <View className="gap-4">
             <Controller
               control={control}
@@ -59,12 +66,12 @@ export default function OtpScreen() {
                 />
               )}
             />
-            <Button label="Continue" onPress={onSubmit} isLoading={isSubmitting} />
+            <Button label="Continue" onPress={onSubmit} isLoading={isSubmitting} disabled={!pendingVerification} />
           </View>
         </PlaceholderCard>
         <Text className="text-sm leading-6 text-ink-500">
-          Replace the placeholder submit handler with your verification use case later. The rest of the
-          screen contract can stay stable.
+          If Firebase is not configured, development mode uses a mock verification id so the rest of the
+          app shell can still be exercised safely.
         </Text>
       </View>
     </ScreenWrapper>

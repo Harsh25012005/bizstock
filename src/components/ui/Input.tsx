@@ -18,6 +18,7 @@ export const Input = forwardRef<TextInput, InputProps>(
   ({ label, hint, error, leftAccessory, rightAccessory, className, editable = true, style, ...props }, ref) => {
     const { colors, radius, spacing, typography } = useTheme();
     const helperText = error ?? hint;
+    const isMultiline = Boolean(props.multiline);
 
     const inputStyle = useMemo(
       () => ({
@@ -26,11 +27,12 @@ export const Input = forwardRef<TextInput, InputProps>(
         lineHeight: typography.lineHeight.base,
         fontFamily: typography.fontFamily.regular,
         fontWeight: typography.fontWeight.regular,
-        minHeight: 52,
+        minHeight: isMultiline ? 112 : 52,
         flex: 1,
       }),
       [
         colors.text,
+        isMultiline,
         typography.fontFamily.regular,
         typography.fontSize.base,
         typography.fontWeight.regular,
@@ -42,12 +44,17 @@ export const Input = forwardRef<TextInput, InputProps>(
       <View className="w-full gap-2">
         {label ? <Label>{label}</Label> : null}
         <View
-          className={cn("flex-row items-center gap-3 border px-4", !editable && "opacity-60", className)}
+          className={cn(
+            "flex-row gap-3 overflow-hidden border px-4",
+            isMultiline ? "items-start py-3" : "items-center",
+            !editable && "opacity-60",
+            className,
+          )}
           style={{
             backgroundColor: colors.surface,
             borderColor: error ? colors.danger : colors.border,
-            borderRadius: radius.md,
-            minHeight: 52,
+            borderRadius: isMultiline ? radius.lg : radius.full,
+            minHeight: isMultiline ? 140 : 52,
           }}
         >
           {leftAccessory}
@@ -55,7 +62,18 @@ export const Input = forwardRef<TextInput, InputProps>(
             ref={ref}
             editable={editable}
             placeholderTextColor={colors.placeholder}
-            style={[inputStyle, style, { paddingVertical: spacing[3] }]}
+            style={[
+              inputStyle,
+              style,
+              isMultiline
+                ? {
+                    paddingTop: spacing[1],
+                    paddingBottom: spacing[1],
+                  }
+                : {
+                    paddingVertical: spacing[3],
+                  },
+            ]}
             {...props}
           />
           {rightAccessory}

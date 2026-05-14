@@ -1,0 +1,14 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Store files under businesses/{businessId}/... to isolate tenant data.
+    match /businesses/{businessId}/{allPaths=**} {
+      allow read, write: if isSignedIn();
+    }
+  }
+}

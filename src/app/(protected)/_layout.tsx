@@ -61,6 +61,13 @@ export default function ProtectedLayout() {
         name="more"
         options={{ title: "More", tabBarLabel: () => <TabLabel label="More" /> }}
       />
+      <Tabs.Screen
+        name="firebase-test"
+        options={{
+          href: null,
+          headerShown: false,
+        }}
+      />
     </Tabs>
   );
 }
